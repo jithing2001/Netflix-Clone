@@ -4,9 +4,9 @@ import 'package:netflix_clone/presentation/home/widgets/numbercard.dart';
 import 'package:netflix_clone/presentation/widgets/maintitle.dart';
 
 class NumberTitleCard extends StatelessWidget {
-  const NumberTitleCard({
-    super.key,
-  });
+  Future<List> function;
+
+  NumberTitleCard({super.key, required this.function});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,20 @@ class NumberTitleCard extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               children: List.generate(
                 10,
-                (index) => NumberCard(index: index,),
+                (index) => FutureBuilder(
+                  future: function,
+                  builder: (context, snapshot) {
+                    String? imagePath = snapshot.data?[index].posterPath;
+                    return snapshot.hasData
+                        ? NumberCard(
+                            index: index,
+                            imagepath: imagePath!,
+                          )
+                        : const Center(
+                            child: CircularProgressIndicator(color: Colors.red),
+                          );
+                  },
+                ),
               )),
         )
       ],

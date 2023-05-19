@@ -12,3 +12,5 @@ const kGreyColor = Colors.grey;
 final BorderRadius kRadius30 = BorderRadius.circular(30);
 
 final BorderRadius kRadius20 = BorderRadius.circular(20);
+
+String baseURL = 'https://image.tmdb.org/t/p/w500';

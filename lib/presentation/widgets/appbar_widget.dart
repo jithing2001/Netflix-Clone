@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:netflix_clone/core/constants.dart';
 
 class AppBarWidget extends StatelessWidget {
-  const AppBarWidget({super.key,required this.title});
+  const AppBarWidget({super.key, required this.title});
 
   final String title;
 

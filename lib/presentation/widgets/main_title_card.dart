@@ -4,7 +4,8 @@ import 'package:netflix_clone/presentation/widgets/maincall.dart';
 import 'package:netflix_clone/presentation/widgets/maintitle.dart';
 
 class MainTitleCard extends StatelessWidget {
-  const MainTitleCard({super.key, required this.title});
+  Future<List> function;
+  MainTitleCard({super.key, required this.title, required this.function});
   final String title;
 
   @override
@@ -20,7 +21,19 @@ class MainTitleCard extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               children: List.generate(
                 10,
-                (index) => const MainCall(),
+                (index) => FutureBuilder(
+                  future: function,
+                  builder: (context, snapshot) {
+                    String? imagePath = snapshot.data?[index].posterPath;
+                    return snapshot.hasData
+                        ? MainCall(
+                            imagePath: imagePath,
+                          )
+                        : const Center(
+                            child: CircularProgressIndicator(color: Colors.red),
+                          );
+                  },
+                ),
               )),
         )
       ],

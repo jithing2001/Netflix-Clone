@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:netflix_clone/background/background_function.dart';
 import 'package:netflix_clone/core/colors/colors.dart';
+import 'package:netflix_clone/core/constants.dart';
 import 'package:netflix_clone/presentation/home/widgets/custom_button_widget.dart';
 
 class BackGroundCardWidget extends StatelessWidget {
@@ -9,13 +11,22 @@ class BackGroundCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          width: double.infinity,
-          height: 600,
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: NetworkImage(
-                      'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/8CYSvYTw9tbFynivdcBcoqRWPGM.jpg'))),
+        FutureBuilder(
+          future: getImageBackground(),
+          builder: (context, snapshot) {
+            String? imagePath = snapshot.data?[0].posterPath;
+            return snapshot.hasData
+                ? Container(
+                    width: double.infinity,
+                    height: 600,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage('$baseURL$imagePath'))),
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(color: Colors.red),
+                  );
+          },
         ),
         Positioned(
           bottom: 0,

@@ -1,14 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:netflix_clone/core/colors/colors.dart';
+import 'package:netflix_clone/presentation/fast_laugh/widgets/videolist.dart';
+import 'package:video_player/video_player.dart';
 
-class VideoListItem extends StatelessWidget {
-  final int index;
+class VideoListItem extends StatefulWidget {
   const VideoListItem({super.key, required this.index});
+
+  final index;
+  @override
+  State<VideoListItem> createState() => _VideoListItemState();
+}
+
+class _VideoListItemState extends State<VideoListItem> {
+  late VideoPlayerController _controller;
+  bool volbut = false;
+  late String videoPath;
+
+  @override
+  void initState() {
+    super.initState;
+    videoController(videoPath: videoPathList[widget.index]);
+  }
+
+  void videoController({required videoPath}) {
+    _controller = VideoPlayerController.network(videoPath)
+      ..initialize().then((_) {
+        setState(() {
+          _controller.play();
+        });
+      });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      Container(color: Colors.accents[index % Colors.accents.length]),
+      InkWell(
+        onTap: () {
+          setState(() {
+            _controller.value.isPlaying
+                ? _controller.pause()
+                : _controller.play();
+          });
+        },
+        child: Container(
+          color: Colors.accents[widget.index % Colors.accents.length],
+          child: _controller.value.isInitialized
+              ? VideoPlayer(_controller)
+              : const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.red,
+                  ),
+                ),
+        ),
+      ),
       Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
@@ -17,17 +66,7 @@ class VideoListItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.black.withOpacity(0.5),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.volume_off,
-                    color: kWhiteColor,
-                  ),
-                ),
-              ),
+              volumeControlingFunction(),
               const Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -51,6 +90,26 @@ class VideoListItem extends StatelessWidget {
       )
     ]);
   }
+
+  Positioned volumeControlingFunction() {
+    return Positioned(
+      bottom: 10,
+      left: 20,
+      child: GestureDetector(
+          onTap: () {
+            if (volbut) {
+              volbut = false;
+              _controller.setVolume(1);
+            } else {
+              volbut = true;
+              _controller.setVolume(0);
+            }
+            setState(() {});
+          },
+          child:
+              (volbut) ? const VolumeWidgetMute() : const VolumeWidgetPlay()),
+    );
+  }
 }
 
 class VideoActionsWidgets extends StatelessWidget {
@@ -68,6 +127,50 @@ class VideoActionsWidgets extends StatelessWidget {
           Icon(icon),
           Text(title),
         ],
+      ),
+    );
+  }
+}
+
+class VolumeWidgetMute extends StatelessWidget {
+  const VolumeWidgetMute({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 45,
+      width: 45,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        color: const Color.fromARGB(94, 36, 36, 36),
+      ),
+      child: const Icon(
+        Icons.volume_off,
+        color: Colors.white,
+      ),
+    );
+  }
+}
+
+class VolumeWidgetPlay extends StatelessWidget {
+  const VolumeWidgetPlay({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 45,
+      width: 45,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        color: const Color.fromARGB(94, 36, 36, 36),
+      ),
+      child: const Icon(
+        Icons.volume_up,
+        color: Colors.white,
       ),
     );
   }

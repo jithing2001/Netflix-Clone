@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:netflix_clone/core/constants.dart';
+import 'package:netflix_clone/popular/popular_functions.dart';
+
 import 'package:netflix_clone/presentation/home/widgets/background_card.dart';
 import 'package:netflix_clone/presentation/home/widgets/number_title_card.dart';
 import 'package:netflix_clone/presentation/widgets/main_title_card.dart';
+import 'package:netflix_clone/south_indian/south_indian_function.dart';
+import 'package:netflix_clone/tense_drama/tense_drama_function.dart';
+import 'package:netflix_clone/top10/top10_functions.dart';
+import 'package:netflix_clone/trending/trending_functions.dart';
 
 ValueNotifier<bool> scrollNotifier = ValueNotifier(true);
 
@@ -28,25 +34,31 @@ class ScreenHome extends StatelessWidget {
                 },
                 child: Stack(children: [
                   ListView(
-                    children: const [
-                      BackGroundCardWidget(),
+                    children: [
+                      const BackGroundCardWidget(),
                       kheight,
                       MainTitleCard(
                         title: "Released in the Past Year",
+                        function: getImagesPopular(),
                       ),
                       kheight,
                       MainTitleCard(
                         title: 'Trending Now',
+                        function: getImageTrending(),
                       ),
                       kheight,
-                      NumberTitleCard(),
+                      NumberTitleCard(
+                        function: getImagetop10(),
+                      ),
                       kheight,
                       MainTitleCard(
                         title: 'Tense Dramas',
+                        function: getImageTense(),
                       ),
                       kheight,
                       MainTitleCard(
                         title: 'South Indian Cinema',
+                        function: getImageSouth(),
                       ),
                     ],
                   ),

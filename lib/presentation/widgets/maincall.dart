@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:netflix_clone/core/constants.dart';
 
 class MainCall extends StatelessWidget {
-  const MainCall({
-    super.key,
-  });
+  String? imagePath;
+  MainCall({super.key, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +12,7 @@ class MainCall extends StatelessWidget {
       height: 250,
       decoration: BoxDecoration(
           borderRadius: kRadius20,
-          image: const DecorationImage(
-              image: NetworkImage(
-                  "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/bfy9TykVykI9I7t19cjB51KlNaX.jpg"))),
+          image: DecorationImage(image: NetworkImage('$baseURL$imagePath'))),
     );
   }
 }

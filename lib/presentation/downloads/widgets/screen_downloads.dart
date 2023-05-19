@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/core/colors/colors.dart';
 import 'package:netflix_clone/core/constants.dart';
+import 'package:netflix_clone/popular/popular_functions.dart';
 import 'package:netflix_clone/presentation/widgets/appbar_widget.dart';
 
 class ScreenDownloads extends StatelessWidget {
@@ -39,7 +40,6 @@ class Section2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         const Text(
@@ -54,34 +54,95 @@ class Section2 extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.grey, fontSize: 16),
         ),
-        SizedBox(
-          width: size.width,
-          height: size.height * 0.55,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Center(
-                child: CircleAvatar(
-                  backgroundColor: Colors.grey.withOpacity(0.5),
-                  radius: size.width * 0.32,
-                ),
-              ),
-              DownloadsImageWidget(
-                imageList: imageList[0],
-                margin: const EdgeInsets.only(left: 130, bottom: 20),
-                angle: 20,
-              ),
-              DownloadsImageWidget(
-                imageList: imageList[0],
-                margin: const EdgeInsets.only(right: 130, bottom: 20),
-                angle: -20,
-              ),
-              DownloadsImageWidget(
-                  imageList: imageList[0],
-                  margin: const EdgeInsets.only(left: 0, bottom: 10))
-            ],
-          ),
-        ),
+        FutureBuilder(
+            future: getImagesPopular(),
+            builder: (context, snapshot) {
+              String? imagepath = snapshot.data?[19].posterPath;
+
+              return snapshot.hasData
+                  ? Stack(children: [
+                      Container(
+                        width: double.infinity,
+                        height: 420,
+                        color: Colors.transparent,
+                        child: Center(
+                          child: Container(
+                            height: 330,
+                            width: 330,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(200),
+                              color: const Color.fromARGB(255, 86, 84, 84),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 105,
+                        left: 60,
+                        child: Transform.rotate(
+                          angle: -0.43,
+                          child: Container(
+                            height: 240,
+                            width: 180,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.red),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                '$baseURL$imagepath',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 101,
+                        left: 190,
+                        child: Transform.rotate(
+                          angle: 0.4,
+                          child: Container(
+                            height: 240,
+                            width: 180,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.blue),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                '$baseURL${snapshot.data?[7].posterPath}',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 80,
+                        left: 123,
+                        child: Container(
+                          height: 270,
+                          width: 180,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.purple),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              '$baseURL${snapshot.data?[14].posterPath}',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      )
+                    ])
+                  : const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.red,
+                      ),
+                    );
+            }),
       ],
     );
   }

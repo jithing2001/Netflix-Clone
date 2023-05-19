@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../core/colors/colors.dart';
+import 'package:netflix_clone/core/constants.dart';
 
 class VideoWidget extends StatelessWidget {
-  const VideoWidget({
-    super.key,
-  });
+  String imagePath;
+  VideoWidget({super.key, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +13,13 @@ class VideoWidget extends StatelessWidget {
           width: double.infinity,
           height: 200,
           child: Image.network(
-            'https://www.themoviedb.org/t/p/w355_and_h200_multi_faces/Ai6HryU8R00XSgiCTeQoF75um84.jpg',
+            '$baseURL$imagePath',
             fit: BoxFit.cover,
           ),
         ),
         Positioned(
-          bottom: 10,right: 10,
+          bottom: 10,
+          right: 10,
           child: CircleAvatar(
             radius: 22,
             backgroundColor: Colors.black.withOpacity(0.5),
@@ -28,7 +27,7 @@ class VideoWidget extends StatelessWidget {
                 onPressed: () {},
                 icon: const Icon(
                   Icons.volume_off,
-                  color: kButtonColorWhite,
+                  color: Colors.white,
                   size: 20,
                 )),
           ),
