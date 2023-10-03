@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:netflix_clone/core/constants.dart';
 import 'package:netflix_clone/popular/popular_functions.dart';
-
 import 'package:netflix_clone/presentation/home/widgets/background_card.dart';
 import 'package:netflix_clone/presentation/home/widgets/number_title_card.dart';
 import 'package:netflix_clone/presentation/widgets/main_title_card.dart';
